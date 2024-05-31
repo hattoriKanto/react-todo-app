@@ -1,35 +1,117 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useRef, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { getPreparedTodos } from "./client/getPreparedTodos";
+
+import { ErrorMessages } from "./types/Messages";
+import { FilterOptions } from "./types/FilterOptions";
+import { Header } from "./components/Header/Header";
+import { Footer } from "./components/Footer/Footer";
+import { TodoList } from "./components/TodoList/TodoList";
+import { TodoItem } from "./components/TodoItem/TodoItem";
+import { useTodoContext } from "./hooks/useTodoContext";
+import { useFetchContext } from "./hooks/useFetchContext";
+
+export const App: React.FC = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const { todos, tempTodo, newTodoTitle } = useTodoContext();
+  const { handleTodoDelete, handleUpdateTodo, handleAddNewTodo } =
+    useFetchContext();
+
+  const [filterOption, setFilterOption] = useState<FilterOptions>(
+    FilterOptions.All
+  );
+  const [errorMessage, setErrorMessage] = useState<ErrorMessages>(
+    ErrorMessages.NoError
+  );
+
+  const visibleTodos = getPreparedTodos(todos, filterOption);
+  const activeTodos = todos.filter((todo) => !todo.completed);
+  const completedTodos = todos.filter((todo) => todo.completed);
+  const isAllTodosCompleted = todos.length === completedTodos.length;
+
+  const handleShowError = (message: ErrorMessages) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(ErrorMessages.NoError);
+    }, 3000);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const normalizedTitle = newTodoTitle.trim();
+
+    if (!normalizedTitle) {
+      handleShowError(ErrorMessages.EmptyTitle);
+
+      return;
+    } else {
+      setErrorMessage(ErrorMessages.NoError);
+      handleAddNewTodo(normalizedTitle);
+    }
+  };
+
+  const handleFilter = (value: FilterOptions) => {
+    setFilterOption(value);
+  };
+
+  const handleDeleteAllCompleted = () => {
+    todos.forEach((todo) => {
+      if (todo.completed) {
+        handleTodoDelete(todo.id);
+      }
+    });
+  };
+
+  const handleChangeStatus = () => {
+    if (activeTodos.length !== 0) {
+      activeTodos.forEach((todo) => handleUpdateTodo(todo.id, !todo.completed));
+    } else {
+      completedTodos.forEach((todo) =>
+        handleUpdateTodo(todo.id, !todo.completed)
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [todos, errorMessage]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="todoapp">
+      <h1 className="todoapp__title">todos</h1>
 
-export default App
+      <div className="todoapp__content">
+        <Header
+          onSubmit={handleSubmit}
+          inputRef={inputRef}
+          isTodosEmpty={!todos.length}
+          isButtonActive={isAllTodosCompleted}
+          onChangeStatus={handleChangeStatus}
+        />
+        <TodoList
+          todos={visibleTodos}
+          inputRef={inputRef}
+        />
+        {tempTodo && (
+          <TodoItem
+            todo={tempTodo}
+            isShowLoader={Boolean(tempTodo)}
+          />
+        )}
+        {!!todos.length && (
+          <Footer
+            counter={activeTodos.length}
+            filterOption={filterOption}
+            onFilter={handleFilter}
+            isClearButtonShowing={Boolean(completedTodos.length)}
+            onDeleteCompleted={handleDeleteAllCompleted}
+          />
+        )}
+      </div>
+    </div>
+  );
+};

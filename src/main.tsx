@@ -1,10 +1,19 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import { createRoot } from "react-dom/client";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+import "bulma/css/bulma.css";
+import "@fortawesome/fontawesome-free/css/all.css";
+import "./styles/index.scss";
+
+import { App } from "./App";
+import { TodoProvider } from "./context/todoContext/todoContext";
+import { FetchProvider, ToastProvider } from "./context";
+
+createRoot(document.getElementById("root") as HTMLDivElement).render(
+  <TodoProvider>
+    <ToastProvider>
+      <FetchProvider>
+        <App />
+      </FetchProvider>
+    </ToastProvider>
+  </TodoProvider>
+);
