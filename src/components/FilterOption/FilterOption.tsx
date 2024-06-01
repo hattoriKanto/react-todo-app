@@ -1,7 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-
-import { FilterOptionsType } from "../../types/FilterOptionsType";
+import { FilterOptionsType } from "../../types/FilterOptions";
 
 type Props = {
   filterOption: FilterOptionsType;

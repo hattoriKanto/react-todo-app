@@ -1,14 +1,15 @@
 import React, { useEffect, useRef } from "react";
+import classNames from "classnames";
 
 import { Header } from "./components/Header/Header";
 import { Footer } from "./components/Footer/Footer";
 import { TodoList } from "./components/TodoList/TodoList";
 import { TodoItem } from "./components/TodoItem/TodoItem";
+import { Buttons } from "./components/Buttons/Buttons";
+
 import { useTodoContext } from "./hooks/useTodoContext";
-import classNames from "classnames";
 import { useThemeContext } from "./hooks/useThemeContext";
 import { ThemeOptionsType } from "./context/themeContext";
-import { Buttons } from "./components/Buttons/Buttons";
 
 export const App: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
