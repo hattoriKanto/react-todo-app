@@ -2,24 +2,20 @@ iframe {
   display: none;
 }
 
-body {
-  min-width: 230px;
-  max-width: 550px;
-  margin: 0 auto;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.notification {
-  transition-property: opacity, min-height;
-  transition-duration: 1s;
-  min-height: 36px;
-}
-
-.notification.hidden {
-  min-height: 0;
-  opacity: 0;
-  pointer-events: none;
+.buttons__wrapper {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px;
+  width: 100%;
 }
 
 @import "./todoapp";
 @import "./todo";
 @import "./filter";
+@import "./themeSwitcher.scss";

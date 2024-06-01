@@ -10,11 +10,16 @@ import { TodoList } from "./components/TodoList/TodoList";
 import { TodoItem } from "./components/TodoItem/TodoItem";
 import { useTodoContext } from "./hooks/useTodoContext";
 import { useFetchContext } from "./hooks/useFetchContext";
+import classNames from "classnames";
+import { useThemeContext } from "./hooks/useThemeContext";
+import { ThemeOptionsType } from "./context/themeContext";
+import { Buttons } from "./components/Buttons/Buttons";
 
 export const App: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { todos, tempTodo, newTodoTitle } = useTodoContext();
+  const { themeOption } = useThemeContext();
   const { handleTodoDelete, handleUpdateTodo, handleAddNewTodo } =
     useFetchContext();
 
@@ -81,36 +86,48 @@ export const App: React.FC = () => {
   }, [todos, errorMessage]);
 
   return (
-    <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
+    <div className="container">
+      <Buttons />
+      <div className="todoapp">
+        <h1
+          className={classNames(
+            "todoapp__title",
+            themeOption === ThemeOptionsType.dark
+              ? "has-text-primary-light"
+              : "has-text-primary-dark"
+          )}
+        >
+          Todo App
+        </h1>
 
-      <div className="todoapp__content">
-        <Header
-          onSubmit={handleSubmit}
-          inputRef={inputRef}
-          isTodosEmpty={!todos.length}
-          isButtonActive={isAllTodosCompleted}
-          onChangeStatus={handleChangeStatus}
-        />
-        <TodoList
-          todos={visibleTodos}
-          inputRef={inputRef}
-        />
-        {tempTodo && (
-          <TodoItem
-            todo={tempTodo}
-            isShowLoader={Boolean(tempTodo)}
+        <div className="todoapp__content">
+          <Header
+            onSubmit={handleSubmit}
+            inputRef={inputRef}
+            isTodosEmpty={!todos.length}
+            isButtonActive={isAllTodosCompleted}
+            onChangeStatus={handleChangeStatus}
           />
-        )}
-        {!!todos.length && (
-          <Footer
-            counter={activeTodos.length}
-            filterOption={filterOption}
-            onFilter={handleFilter}
-            isClearButtonShowing={Boolean(completedTodos.length)}
-            onDeleteCompleted={handleDeleteAllCompleted}
+          <TodoList
+            todos={visibleTodos}
+            inputRef={inputRef}
           />
-        )}
+          {tempTodo && (
+            <TodoItem
+              todo={tempTodo}
+              isShowLoader={Boolean(tempTodo)}
+            />
+          )}
+          {!!todos.length && (
+            <Footer
+              counter={activeTodos.length}
+              filterOption={filterOption}
+              onFilter={handleFilter}
+              isClearButtonShowing={Boolean(completedTodos.length)}
+              onDeleteCompleted={handleDeleteAllCompleted}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
