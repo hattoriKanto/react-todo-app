@@ -7,13 +7,16 @@ import "./styles/index.scss";
 import { App } from "./App";
 import { TodoProvider } from "./context/todoContext/todoContext";
 import { FetchProvider, ToastProvider } from "./context";
+import { ThemeProvider } from "./context/themeContext";
 
 createRoot(document.getElementById("root") as HTMLDivElement).render(
   <TodoProvider>
-    <ToastProvider>
-      <FetchProvider>
-        <App />
-      </FetchProvider>
-    </ToastProvider>
+    <ThemeProvider>
+      <ToastProvider>
+        <FetchProvider>
+          <App />
+        </FetchProvider>
+      </ToastProvider>
+    </ThemeProvider>
   </TodoProvider>
 );
