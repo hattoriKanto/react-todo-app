@@ -1,19 +1,21 @@
-import React from 'react';
+import React from "react";
 
-import { Todo } from '../../types/Todo';
-import { TodoItem } from '../TodoItem/TodoItem';
-import { useTodoContext } from '../../hooks/useTodoContext';
+import { TodoItem } from "../TodoItem/TodoItem";
+import { useTodoContext } from "../../hooks/useTodoContext";
 
 type Props = {
-  todos: Todo[];
   inputRef: React.RefObject<HTMLInputElement>;
 };
 
-export const TodoList: React.FC<Props> = ({ todos, inputRef }) => {
-  const { processingTodoIds } = useTodoContext();
+export const TodoList: React.FC<Props> = ({ inputRef }) => {
+  const { processingTodoIds, visibleTodos } = useTodoContext();
+
   return (
-    <section className="todoapp__main" data-cy="TodoList">
-      {todos.map(todo => {
+    <section
+      className="todoapp__main"
+      data-cy="TodoList"
+    >
+      {visibleTodos.map((todo) => {
         const isTodoProcessing = processingTodoIds.includes(todo.id);
 
         return (

@@ -1,12 +1,12 @@
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
-import { FilterOptions } from '../../types/FilterOptions';
+import { FilterOptionsType } from "../../types/FilterOptionsType";
 
 type Props = {
-  filterOption: FilterOptions;
-  onFilter: (value: FilterOptions) => void;
-  optionName: FilterOptions;
+  filterOption: FilterOptionsType;
+  onFilter: (value: FilterOptionsType) => void;
+  optionName: FilterOptionsType;
 };
 
 export const FilterOption: React.FC<Props> = ({
@@ -17,7 +17,7 @@ export const FilterOption: React.FC<Props> = ({
   return (
     <a
       href={`#/${optionName}`}
-      className={classNames('filter__link', {
+      className={classNames("filter__link", {
         selected: filterOption === optionName,
       })}
       data-cy={`FilterLink${optionName}`}

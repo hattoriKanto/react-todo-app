@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import classNames from 'classnames';
+import React, { useEffect, useState } from "react";
+import classNames from "classnames";
 
-import { Todo } from '../../types/Todo';
-import { useFetchContext } from '../../hooks/useFetchContext';
+import { Todo } from "../../types/Todo";
+import { useFetchContext } from "../../hooks/useFetchContext";
 
 type Props = {
   todo: Todo;
@@ -55,9 +55,12 @@ export const TodoItem: React.FC<Props> = ({ todo, isShowLoader, inputRef }) => {
   return (
     <div
       data-cy="Todo"
-      className={classNames('todo', { completed: todo.completed })}
+      className={classNames("todo", { completed: todo.completed })}
     >
-      <label aria-label="Todo status" className="todo__status-label">
+      <label
+        aria-label="Todo status"
+        className="todo__status-label"
+      >
         <input
           data-cy="TodoStatus"
           type="checkbox"
@@ -105,10 +108,10 @@ export const TodoItem: React.FC<Props> = ({ todo, isShowLoader, inputRef }) => {
             placeholder="Empty todo will be deleted"
             value={newTitle}
             ref={inputRef}
-            onChange={event => setNewTitle(event.target.value)}
+            onChange={(event) => setNewTitle(event.target.value)}
             onBlur={handleSubmit}
-            onKeyUp={event => {
-              if (event.key === 'Escape') {
+            onKeyUp={(event) => {
+              if (event.key === "Escape") {
                 setIsEditing(false);
               }
             }}
@@ -118,7 +121,7 @@ export const TodoItem: React.FC<Props> = ({ todo, isShowLoader, inputRef }) => {
 
       <div
         data-cy="TodoLoader"
-        className={classNames('modal overlay', { 'is-active': isShowLoader })}
+        className={classNames("modal overlay", { "is-active": isShowLoader })}
       >
         <div className="modal-background has-background-white-ter" />
         <div className="loader" />

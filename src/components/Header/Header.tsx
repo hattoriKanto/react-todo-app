@@ -1,40 +1,43 @@
-import React from 'react';
+import React from "react";
 
-import { Form } from '../Form/Form';
-import classNames from 'classnames';
+import { Form } from "../Form/Form";
+import classNames from "classnames";
+import { useFetchContext, useTodoContext } from "../../hooks";
 
 type Props = {
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   inputRef: React.RefObject<HTMLInputElement>;
-  isTodosEmpty: boolean;
-  isButtonActive: boolean;
-  onChangeStatus: () => void;
 };
 
-export const Header: React.FC<Props> = ({
-  onSubmit,
-  inputRef,
-  isTodosEmpty,
-  isButtonActive,
-  onChangeStatus,
-}) => {
+export const Header: React.FC<Props> = ({ inputRef }) => {
+  const { todos, activeTodos, completedTodos } = useTodoContext();
+  const { handleUpdateTodo } = useFetchContext();
+
+  const isButtonActive = todos.length === completedTodos.length;
+
+  const handleChangeStatus = () => {
+    if (activeTodos.length !== 0) {
+      activeTodos.forEach((todo) => handleUpdateTodo(todo.id, !todo.completed));
+    } else {
+      completedTodos.forEach((todo) =>
+        handleUpdateTodo(todo.id, !todo.completed)
+      );
+    }
+  };
+
   return (
     <header className="todoapp__header">
-      {!isTodosEmpty && (
+      {!!todos.length && (
         <button
           type="button"
-          className={classNames('todoapp__toggle-all', {
+          className={classNames("todoapp__toggle-all", {
             active: isButtonActive,
           })}
           data-cy="ToggleAllButton"
-          onClick={onChangeStatus}
+          onClick={handleChangeStatus}
         />
       )}
 
-      <Form
-        onSubmit={onSubmit}
-        inputRef={inputRef}
-      />
+      <Form inputRef={inputRef} />
     </header>
   );
 };

@@ -37,13 +37,8 @@ export const FetchContext = createContext<FetchContextType>({
 });
 
 export const FetchProvider: React.FC<FetchProviderType> = ({ children }) => {
-  const {
-    setTodos,
-    setProcessingTodoIds,
-    setIsInputDisabled,
-    setNewTodoTitle,
-    setTempTodo,
-  } = useTodoContext();
+  const { setTodos, setProcessingTodoIds, setNewTodoTitle, setTempTodo } =
+    useTodoContext();
   const { notify } = useToastContext();
 
   useEffect(() => {
@@ -86,8 +81,6 @@ export const FetchProvider: React.FC<FetchProviderType> = ({ children }) => {
 
   const handleAddNewTodo = async (title: string) => {
     try {
-      setIsInputDisabled(true);
-
       await createOneTodo(title);
       setNewTodoTitle("");
 
@@ -97,7 +90,6 @@ export const FetchProvider: React.FC<FetchProviderType> = ({ children }) => {
     } catch (err) {
       notify(ToastOptions.Error, ErrorMessages.Add);
     } finally {
-      setIsInputDisabled(false);
       setTempTodo(null);
     }
   };

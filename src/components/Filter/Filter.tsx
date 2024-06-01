@@ -1,21 +1,25 @@
-import React from 'react';
+import React from "react";
+import { FilterOptionsType } from "../../types/FilterOptions";
+import { FilterOption } from "../FilterOption";
+import { useTodoContext } from "../../hooks";
 
-import { FilterOptions } from '../../types/FilterOptions';
-import { FilterOption } from '../FilterOption/FilterOption';
+export const Filter: React.FC = () => {
+  const { filterOption, setFilterOption } = useTodoContext();
 
-type Props = {
-  filterOption: FilterOptions;
-  onFilter: (value: FilterOptions) => void;
-};
+  const handleFilter = (value: FilterOptionsType) => {
+    setFilterOption(value);
+  };
 
-export const Filter: React.FC<Props> = ({ filterOption, onFilter }) => {
   return (
-    <nav className="filter" data-cy="Filter">
-      {Object.values(FilterOptions).map(option => (
+    <nav
+      className="filter"
+      data-cy="Filter"
+    >
+      {Object.values(FilterOptionsType).map((option) => (
         <FilterOption
           key={option}
           filterOption={filterOption}
-          onFilter={onFilter}
+          onFilter={handleFilter}
           optionName={option}
         />
       ))}
