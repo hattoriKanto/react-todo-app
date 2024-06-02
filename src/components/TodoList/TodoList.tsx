@@ -13,7 +13,6 @@ export const TodoList: React.FC<Props> = ({ inputRef }) => {
   return (
     <section
       className="todoapp__main"
-      data-cy="TodoList"
     >
       {visibleTodos.map((todo) => {
         const isTodoProcessing = processingTodoIds.includes(todo.id);

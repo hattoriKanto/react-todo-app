@@ -54,7 +54,6 @@ export const TodoItem: React.FC<Props> = ({ todo, isShowLoader, inputRef }) => {
 
   return (
     <div
-      data-cy="Todo"
       className={classNames("todo", { completed: todo.completed })}
     >
       <label
@@ -62,7 +61,6 @@ export const TodoItem: React.FC<Props> = ({ todo, isShowLoader, inputRef }) => {
         className="todo__status-label"
       >
         <input
-          data-cy="TodoStatus"
           type="checkbox"
           className="todo__status"
           checked={todo.completed}
@@ -77,7 +75,6 @@ export const TodoItem: React.FC<Props> = ({ todo, isShowLoader, inputRef }) => {
       {!isEditing && (
         <>
           <span
-            data-cy="TodoTitle"
             className="todo__title"
             onDoubleClick={() => setIsEditing(true)}
           >
@@ -87,7 +84,6 @@ export const TodoItem: React.FC<Props> = ({ todo, isShowLoader, inputRef }) => {
           <button
             type="button"
             className="todo__remove"
-            data-cy="TodoDelete"
             onClick={() => {
               if (handleTodoDelete) {
                 handleTodoDelete(todo.id);
@@ -102,7 +98,6 @@ export const TodoItem: React.FC<Props> = ({ todo, isShowLoader, inputRef }) => {
       {isEditing && (
         <form onSubmit={handleSubmit}>
           <input
-            data-cy="TodoTitleField"
             type="text"
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
@@ -120,7 +115,6 @@ export const TodoItem: React.FC<Props> = ({ todo, isShowLoader, inputRef }) => {
       )}
 
       <div
-        data-cy="TodoLoader"
         className={classNames("modal overlay", { "is-active": isShowLoader })}
       >
         <div className="modal-background has-background-white-ter" />

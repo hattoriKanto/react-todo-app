@@ -32,7 +32,6 @@ export const Form: React.FC<Props> = ({ inputRef }) => {
   return (
     <form onSubmit={handleSubmit}>
       <input
-        data-cy="NewTodoField"
         type="text"
         value={newTodoTitle}
         className="todoapp__new-todo"

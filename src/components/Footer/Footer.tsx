@@ -18,11 +18,9 @@ export const Footer: React.FC = () => {
   return (
     <footer
       className="todoapp__footer"
-      data-cy="Footer"
     >
       <span
         className="todo-count"
-        data-cy="TodosCounter"
       >
         {activeTodos.length} items left
       </span>
@@ -32,7 +30,6 @@ export const Footer: React.FC = () => {
       <button
         type="button"
         className="todoapp__clear-completed"
-        data-cy="ClearCompletedButton"
         disabled={!completedTodos.length}
         onClick={handleDeleteAllCompleted}
       >

@@ -31,7 +31,7 @@ export const TodoProvider: React.FC<todoProviderType> = ({ children }) => {
 
   const activeTodos = todos.filter((todo) => !todo.completed);
   const completedTodos = todos.filter((todo) => todo.completed);
-  const visibleTodos = getPreparedTodos(todos, filterOption);
+  const visibleTodos: Todo[] = getPreparedTodos(todos, filterOption);
 
   const todosState: todoContextType = {
     todos,

@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { FetchContextType, FetchProviderType } from "./fetchContext.types";
 import { useTodoContext } from "../../hooks/useTodoContext";
@@ -34,15 +34,17 @@ export const FetchContext = createContext<FetchContextType>({
       }, 1000);
     });
   },
+  isTodoLoading: true,
 });
 
 export const FetchProvider: React.FC<FetchProviderType> = ({ children }) => {
   const { setTodos, setProcessingTodoIds, setNewTodoTitle, setTempTodo } =
     useTodoContext();
   const { notify } = useToastContext();
+  const [isTodoLoading, setIsTodoLoading] = useState(true);
 
   useEffect(() => {
-    handleGetAll();
+    handleGetAll().then(() => setIsTodoLoading(false));
   }, []);
 
   const handleGetAll = async () => {
@@ -55,7 +57,7 @@ export const FetchProvider: React.FC<FetchProviderType> = ({ children }) => {
 
       setTodos(data);
     } catch (err) {
-      console.error(err);
+      notify(ToastOptions.Error, ErrorMessages.Load);
     }
   };
 
@@ -82,6 +84,11 @@ export const FetchProvider: React.FC<FetchProviderType> = ({ children }) => {
   const handleAddNewTodo = async (title: string) => {
     try {
       await createOneTodo(title);
+      setTempTodo({
+        id: 0,
+        title,
+        completed: false,
+      });
       setNewTodoTitle("");
 
       await handleGetAll();
@@ -114,7 +121,12 @@ export const FetchProvider: React.FC<FetchProviderType> = ({ children }) => {
     }
   };
 
-  const fetchState = { handleTodoDelete, handleAddNewTodo, handleUpdateTodo };
+  const fetchState = {
+    handleTodoDelete,
+    handleAddNewTodo,
+    handleUpdateTodo,
+    isTodoLoading,
+  };
 
   return (
     <FetchContext.Provider value={fetchState}>{children}</FetchContext.Provider>

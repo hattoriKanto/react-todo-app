@@ -10,10 +10,12 @@ import { Buttons } from "./components/Buttons/Buttons";
 import { useTodoContext } from "./hooks/useTodoContext";
 import { useThemeContext } from "./hooks/useThemeContext";
 import { ThemeOptionsType } from "./context/themeContext";
+import { useFetchContext } from "./hooks";
 
 export const App: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const { isTodoLoading } = useFetchContext();
   const { todos, tempTodo } = useTodoContext();
   const { themeOption } = useThemeContext();
 
@@ -38,17 +40,21 @@ export const App: React.FC = () => {
           Todo App
         </h1>
 
-        <div className="todoapp__content">
-          <Header inputRef={inputRef} />
-          <TodoList inputRef={inputRef} />
-          {tempTodo && (
-            <TodoItem
-              todo={tempTodo}
-              isShowLoader={Boolean(tempTodo)}
-            />
-          )}
-          {!!todos.length && <Footer />}
-        </div>
+        {isTodoLoading ? (
+          <div className="loader"></div>
+        ) : (
+          <div className="todoapp__content">
+            <Header inputRef={inputRef} />
+            <TodoList inputRef={inputRef} />
+            {tempTodo && (
+              <TodoItem
+                todo={tempTodo}
+                isShowLoader={Boolean(tempTodo)}
+              />
+            )}
+            {!!todos.length && <Footer />}
+          </div>
+        )}
       </div>
     </div>
   );

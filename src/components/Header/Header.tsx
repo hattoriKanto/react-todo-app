@@ -32,7 +32,6 @@ export const Header: React.FC<Props> = ({ inputRef }) => {
           className={classNames("todoapp__toggle-all", {
             active: isButtonActive,
           })}
-          data-cy="ToggleAllButton"
           onClick={handleChangeStatus}
         />
       )}

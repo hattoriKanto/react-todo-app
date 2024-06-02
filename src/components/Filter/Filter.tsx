@@ -13,7 +13,6 @@ export const Filter: React.FC = () => {
   return (
     <nav
       className="filter"
-      data-cy="Filter"
     >
       {Object.values(FilterOptionsType).map((option) => (
         <FilterOption
