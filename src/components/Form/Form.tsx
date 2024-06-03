@@ -22,6 +22,7 @@ export const Form: React.FC<Props> = ({ inputRef }) => {
     const normalizedTitle = newTodoTitle.trim();
     if (!normalizedTitle) {
       notify(ToastOptions.Error, ErrorMessages.EmptyTitle);
+      setIsInputDisabled(false);
       return;
     }
 
