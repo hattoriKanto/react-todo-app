@@ -24,12 +24,12 @@ export const Buttons: React.FC = () => {
       >
         <FontAwesomeIcon
           className={classNames(
+            "switcher__icon",
             themeOption === ThemeOptionsType.dark
               ? "has-text-primary-light"
               : "has-text-primary-dark"
           )}
           icon={faLightbulb}
-          style={{ height: "30px" }}
         />
       </button>
     </div>

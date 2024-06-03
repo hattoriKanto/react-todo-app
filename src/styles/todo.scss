@@ -58,16 +58,11 @@
     cursor: pointer;
 
     transform: translateY(-2px);
-    opacity: 0;
     transition: color 0.2s ease-out;
 
     &:hover {
       color: #af5b5e;
     }
-  }
-
-  &:hover &__remove {
-    opacity: 1;
   }
 
   &__title-field {
@@ -146,4 +141,10 @@
 .has-error .temp-item-exit-active {
   transform: translateY(0);
   overflow: hidden;
+}
+
+@media (max-width: 575px) {
+  .todo {
+    font-size: 20px;
+  }
 }

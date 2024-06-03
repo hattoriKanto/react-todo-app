@@ -144,3 +144,32 @@
     }
   }
 }
+
+@media (max-width: 1024px) {
+  .todoapp {
+    width: 100%;
+    max-width: none;
+    min-width: none;
+
+    &__title {
+      font-size: 60px;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .todoapp {
+    &__title {
+      font-size: 48px;
+    }
+
+    &__footer {
+      font-size: 10px;
+    }
+
+    &__new-todo {
+      padding: 14px 14px 14px 40px;
+      font-size: 20px;
+    }
+  }
+}
