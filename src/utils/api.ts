@@ -1,20 +1,25 @@
-import axios from 'axios';
+import axios from "axios";
+
+enum ActionsOnMany {
+  delete = "delete",
+  update = "update",
+}
 
 const apiClient = axios.create({
-  baseURL: 'https://fastify-todo-app-with-db.vercel.app',
+  baseURL: "http://127.0.0.1:3000",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 export const getAllTodos = async () => {
   try {
-    const response = await apiClient.get('/todos');
+    const response = await apiClient.get("/todos");
 
     return response.data;
   } catch (err) {
     if (err instanceof Error) {
-      console.error('Failed to fetch todos:', err);
+      console.error("Failed to fetch todos:", err);
       throw err.message;
     }
   }
@@ -22,10 +27,10 @@ export const getAllTodos = async () => {
 
 export const createOneTodo = async (title: string) => {
   try {
-    await apiClient.post('/todos', { title });
+    await apiClient.post("/todos", { title });
   } catch (err) {
     if (err instanceof Error) {
-      console.error('Failed to add todo:', err);
+      console.error("Failed to add todo:", err);
       throw err.message;
     }
   }
@@ -36,7 +41,7 @@ export const deleteOneTodo = async (todoId: number) => {
     await apiClient.delete(`/todos/${todoId}`);
   } catch (err) {
     if (err instanceof Error) {
-      console.error('Failed to delete todo:', err);
+      console.error("Failed to delete todo:", err);
       throw err.message;
     }
   }
@@ -44,17 +49,55 @@ export const deleteOneTodo = async (todoId: number) => {
 
 export const updateOneTodo = async (
   todoId: number,
-  option: string | boolean,
+  option: string | boolean
 ) => {
   try {
-    let key = 'completed';
-    if (typeof option === 'string') {
-      key = 'title';
+    let key = "completed";
+    if (typeof option === "string") {
+      key = "title";
     }
     await apiClient.patch(`/todos/${todoId}`, { [key]: option });
   } catch (err) {
     if (err instanceof Error) {
-      console.error('Failed to update todo:', err);
+      console.error("Failed to update todo:", err);
+      throw err.message;
+    }
+  }
+};
+
+export const updateMany = async (
+  ids: number[],
+  completed: boolean
+) => {
+  try {
+    await apiClient.patch(
+      `/todos`,
+      { ids, completed },
+      {
+        params: {
+          action: ActionsOnMany.update,
+        },
+      }
+    );
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error("Failed to update todo:", err);
+      throw err.message;
+    }
+  }
+};
+
+export const deleteMany = async (ids: number[]) => {
+  try {
+    await apiClient.delete(`/todos`, {
+      params: {
+        action: ActionsOnMany.delete,
+        ids: ids.join(","),
+      },
+    });
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error("Failed to update todo:", err);
       throw err.message;
     }
   }

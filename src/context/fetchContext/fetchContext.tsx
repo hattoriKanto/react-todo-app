@@ -4,8 +4,10 @@ import { FetchContextType, FetchProviderType } from "./fetchContext.types";
 import { useTodoContext } from "../../hooks/useTodoContext";
 import {
   createOneTodo,
+  deleteMany,
   deleteOneTodo,
   getAllTodos,
+  updateMany,
   updateOneTodo,
 } from "../../utils/api";
 import { ErrorMessages, SuccessMessages } from "../../types/Messages";
@@ -28,6 +30,20 @@ export const FetchContext = createContext<FetchContextType>({
     });
   },
   handleUpdateTodo: () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 1000);
+    });
+  },
+  handleUpdateMany: () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 1000);
+    });
+  },
+  handleDeleteMany: () => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve();
@@ -121,10 +137,55 @@ export const FetchProvider: React.FC<FetchProviderType> = ({ children }) => {
     }
   };
 
+  const handleUpdateMany = async (
+    ids: number[],
+    completed: boolean
+  ) => {
+    try {
+      setProcessingTodoIds((prevTodos) => [...prevTodos, ...ids]);
+
+      await updateMany(ids, completed);
+
+      await handleGetAll();
+
+      notify(ToastOptions.Success, SuccessMessages.UpdateMany);
+    } catch (err) {
+      notify(ToastOptions.Error, ErrorMessages.UpdateMany);
+    } finally {
+      setProcessingTodoIds((prevTodos) => {
+        const filteredTodos = prevTodos.filter((id) => !ids.includes(id));
+
+        return filteredTodos;
+      });
+    }
+  };
+
+  const handleDeleteMany = async (ids: number[]) => {
+    try {
+      setProcessingTodoIds((prevTodos) => [...prevTodos, ...ids]);
+
+      await deleteMany(ids);
+
+      await handleGetAll();
+
+      notify(ToastOptions.Success, SuccessMessages.DeleteMany);
+    } catch (err) {
+      notify(ToastOptions.Error, ErrorMessages.DeleteMany);
+    } finally {
+      setProcessingTodoIds((prevTodos) => {
+        const filteredTodos = prevTodos.filter((id) => ids.includes(id));
+
+        return filteredTodos;
+      });
+    }
+  };
+
   const fetchState = {
     handleTodoDelete,
     handleAddNewTodo,
     handleUpdateTodo,
+    handleUpdateMany,
+    handleDeleteMany,
     isTodoLoading,
   };
 

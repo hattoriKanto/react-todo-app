@@ -9,24 +9,28 @@ type Props = {
 };
 
 export const Header: React.FC<Props> = ({ inputRef }) => {
-  const { todos, activeTodos, completedTodos } = useTodoContext();
-  const { handleUpdateTodo } = useFetchContext();
+  const { visibleTodos, activeTodos, completedTodos } = useTodoContext();
+  const { handleUpdateMany } = useFetchContext();
 
-  const isButtonActive = todos.length === completedTodos.length;
+  const isButtonActive = visibleTodos.length === completedTodos.length;
 
   const handleChangeStatus = () => {
     if (activeTodos.length !== 0) {
-      activeTodos.forEach((todo) => handleUpdateTodo(todo.id, !todo.completed));
+      const ids = activeTodos.map((todo) => todo.id);
+      const completed = true;
+
+      handleUpdateMany(ids, completed);
     } else {
-      completedTodos.forEach((todo) =>
-        handleUpdateTodo(todo.id, !todo.completed)
-      );
+      const ids = completedTodos.map((todo) => todo.id);
+      const completed = false;
+
+      handleUpdateMany(ids, completed);
     }
   };
 
   return (
     <header className="todoapp__header">
-      {!!todos.length && (
+      {!!visibleTodos.length && (
         <button
           type="button"
           className={classNames("todoapp__toggle-all", {

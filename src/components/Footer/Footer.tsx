@@ -4,33 +4,30 @@ import { Filter } from "../Filter/Filter";
 import { useFetchContext, useTodoContext } from "../../hooks";
 
 export const Footer: React.FC = () => {
-  const { todos, activeTodos, completedTodos } = useTodoContext();
-  const { handleTodoDelete } = useFetchContext();
+  const { activeTodos, completedTodos, visibleTodos } = useTodoContext();
+  const { handleDeleteMany } = useFetchContext();
+
+  const isButtonActive =
+    visibleTodos.length >= completedTodos.length &&
+    completedTodos.length !== 1 &&
+    completedTodos.length !== 0;
 
   const handleDeleteAllCompleted = () => {
-    todos.forEach((todo) => {
-      if (todo.completed) {
-        handleTodoDelete(todo.id);
-      }
-    });
+    const ids = completedTodos.map((todo) => todo.id);
+
+    handleDeleteMany(ids);
   };
 
   return (
-    <footer
-      className="todoapp__footer"
-    >
-      <span
-        className="todo-count"
-      >
-        {activeTodos.length} items left
-      </span>
+    <footer className="todoapp__footer">
+      <span className="todo-count">{activeTodos.length} items left</span>
 
       <Filter />
 
       <button
         type="button"
         className="todoapp__clear-completed"
-        disabled={!completedTodos.length}
+        disabled={!isButtonActive}
         onClick={handleDeleteAllCompleted}
       >
         Clear completed
