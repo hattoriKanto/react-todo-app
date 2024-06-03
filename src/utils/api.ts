@@ -6,7 +6,8 @@ enum ActionsOnMany {
 }
 
 const apiClient = axios.create({
-  baseURL: "http://127.0.0.1:3000",
+  // http://127.0.0.1:3000
+  baseURL: "https://fastify-todo-app-with-db.vercel.app/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -65,10 +66,7 @@ export const updateOneTodo = async (
   }
 };
 
-export const updateMany = async (
-  ids: number[],
-  completed: boolean
-) => {
+export const updateMany = async (ids: number[], completed: boolean) => {
   try {
     await apiClient.patch(
       `/todos`,
